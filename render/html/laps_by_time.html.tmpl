@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>Lap Times</title>
+        <script src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
+    </head>
+    <body>
+        <div id="chart"></div>
+    </body>
+    <script>
+        var data = [
+            {{ range $index, $car := .Cars -}}
+            {
+                x: {{ $car.LapTimes }},
+                y: {{ $car.LapNumbers }},
+                mode: 'lines+markers',
+                type: 'scatter',
+                name: 'Car {{ add $index 1 }}',
+                hoverinfo: 'text',
+                hovertext: {{ $car.HoverText }}
+            },
+            {{ end -}}
+        ];
+    
+        var layout = {
+            title: 'Lap Times',
+            xaxis: {
+                title: 'Time (seconds)',
+                tickvals: {{ .Ticks }},
+                ticktext: {{ .TicksFormatted }},
+                tickmode: 'array',
+                ticklabeloverflow: 'hide past domain',
+            },
+            yaxis: {
+                title: 'Lap Number'
+            }
+        };
+    
+        Plotly.newPlot('chart', data, layout);
+    </script>
+</html>
